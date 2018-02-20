@@ -16,7 +16,7 @@ network.create_layer(neurons: 2)
 network.initialize_edges
 
 network.run([0.5]*10)
-=> [3, 0.1]
+=> [0.029312230751356326, 0.0040701377158961285]
 
 ## Improvements / Bugs
 Improvements and bugs are listed as issues in the gem repository.
