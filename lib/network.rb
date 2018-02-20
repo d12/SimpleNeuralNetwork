@@ -29,11 +29,16 @@ class SimpleNeuralNetwork
 
     attr_writer :normalization_function
 
+    attr_accessor :edge_initialization_function
+    attr_accessor :neuron_bias_initialization_function
+
     def initialize
       @layers = []
       @inputs = []
 
       @normalization_function = method(:default_normalization_function)
+      @edge_initialization_function = method(:default_edge_initialization_function)
+      @neuron_bias_initialization_function = method(:default_neuron_bias_initialization_function)
     end
 
     # Run an input set against the neural network.
@@ -94,6 +99,14 @@ class SimpleNeuralNetwork
     # f(x) = 1 / (1 + e^(-x))
     def default_normalization_function(output)
       1 / (1 + (Math::E ** (-1 * output)))
+    end
+
+    def default_edge_initialization_function
+      rand(-5..5)
+    end
+
+    def default_neuron_bias_initialization_function
+      0
     end
   end
 end
