@@ -1,0 +1,13 @@
+Gem::Specification.new do |s|
+  s.name        = 'SimpleNeuralNetwork'
+  s.version     = '0.0.1'
+  s.date        = '2018-02-20'
+  s.summary     = "A very simple neural network implementation in Ruby."
+  s.description = "A very simple neural network implementation in Ruby."
+  s.authors     = ["Nathaniel Woodthorpe"]
+  s.email       = 'njwoodthorpe@gmail.com'
+  s.files       = ["lib/simple_neural_network.rb"]
+  s.files       += Dir['lib/*.rb']
+  s.homepage    = 'https://github.com/d12/SimpleNeuralNetwork'
+  s.license     = 'MIT'
+end
