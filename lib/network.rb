@@ -44,7 +44,9 @@ class SimpleNeuralNetwork
       @inputs = inputs
 
       # Get output from last layer. It recursively depends on layers before it.
-      @layers[-1].get_output
+      @layers[-1].get_output.map do |output|
+        normalize_output(output)
+      end
     end
 
     # Returns the number of input nodes
@@ -75,6 +77,15 @@ class SimpleNeuralNetwork
     # Initializes with random weights between -5 and 5
     def initialize_edges
       @layers.each(&:initialize_neuron_edges)
+    end
+
+    private
+
+    # Apply a normalization function to the network output
+    # By default, we apply the standard logistic sigmoid function
+    # f(x) = 1 / (1 + e^(-x))
+    def normalize_output(output)
+      1 / (1 + (Math::E ** (-1 * output)))
     end
   end
 end
