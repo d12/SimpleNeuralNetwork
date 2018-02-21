@@ -4,9 +4,6 @@ require_relative "layer"
 #  - Initialize the new Network object
 #  - Create layers using Network#create_layer
 #    (This creates layers from left to right, input -> hidden layers -> output layer)
-#  - Call Network#initialize_edges to populate neuron edges in the network.
-#    This has to be done after creating all layers because the number of edges depends
-#    on the number on neurons in the next layer
 
 # Sample usage:
 #
@@ -14,8 +11,6 @@ require_relative "layer"
 #
 # network.create_layer(neurons: 10)
 # network.create_layer(neurons: 2)
-
-# network.initialize_edges
 
 # network.run([0.5]*10)
 
@@ -77,15 +72,11 @@ class SimpleNeuralNetwork
 
         new_layer.prev_layer = prev_layer
         prev_layer.next_layer = new_layer
+
+        prev_layer.initialize_neuron_edges
       else
         @layers << Layer.new(neurons, self)
       end
-    end
-
-    # This traverses the network and initializes all neurons with edges
-    # Initializes with random weights between -5 and 5
-    def initialize_edges
-      @layers.each(&:initialize_neuron_edges)
     end
 
     def reset_normalization_function
