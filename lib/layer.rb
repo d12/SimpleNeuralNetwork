@@ -18,6 +18,9 @@ class SimpleNeuralNetwork
       @neurons = []
       @network = network
 
+      @prev_layer = nil
+      @next_layer = nil
+
       populate_neurons
     end
 
