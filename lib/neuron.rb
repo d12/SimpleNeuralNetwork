@@ -9,7 +9,6 @@ class SimpleNeuralNetwork
       @layer = layer
       @bias = layer.network.neuron_bias_initialization_function.call
       @edges = []
-      @value = nil
     end
 
     # A neuron should have one edge per neuron in the next layer
