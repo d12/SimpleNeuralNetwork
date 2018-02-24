@@ -1,4 +1,5 @@
 require_relative "layer"
+require 'json'
 
 # To properly initialze a network:
 #  - Initialize the new Network object
@@ -81,6 +82,56 @@ class SimpleNeuralNetwork
 
     def reset_normalization_function
       @normalization_function = method(:default_normalization_function)
+    end
+
+    # Serializes the neural network into a JSON string. This can later be deserialized back into a Network object
+    # Useful for storing partially trained neural networks.
+    # Note: Currently does not serialize bias init function, edge init function, or normalization function
+    def serialize
+      {
+        layers: layers.map do |layer|
+          {
+            neurons: layer.neurons.map do |neuron|
+              {
+                bias: neuron.bias.to_f,
+                edges: neuron.edges.map(&:to_f)
+              }
+            end
+          }
+        end
+      }.to_json
+    end
+
+    # Deserialize a JSON neural network back into a Ruby object
+    # Note that the normalization function will need to be reset.
+    # Normalization function serialization in the future would be cool.
+    def self.deserialize(string)
+      hash = JSON.parse(string)
+
+      network = Network.new
+
+      hash["layers"].each do |layer|
+        neurons_array = layer["neurons"]
+        layer = Layer.new(neurons_array.length, network)
+        network.layers << layer
+
+        layer.neurons.each_with_index do |neuron, index|
+          neuron_hash = neurons_array[index]
+
+          neuron.bias = neuron_hash["bias"].to_f
+          neuron.edges = neuron_hash["edges"].map(&:to_f)
+        end
+      end
+
+      network.layers.each_with_index do |layer, index|
+        unless index == 0
+          layer.prev_layer = network.layers[index - 1]
+        end
+
+        layer.next_layer = network.layers[index + 1]
+      end
+
+      network
     end
 
     private
