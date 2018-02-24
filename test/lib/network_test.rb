@@ -1,4 +1,5 @@
 require_relative '../test_helper'
+require 'json'
 
 class NetworkTest < Minitest::Test
   def setup
@@ -104,5 +105,39 @@ class NetworkTest < Minitest::Test
     # Layer 2: (1 * 5) + 1 = 6
     # Layer 3: (6 * 5) + 1 = 31
     assert output == [31]
+  end
+
+  def test_serialize_generates_valid_json
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+
+    assert JSON.parse(@network.serialize)
+  end
+
+  def test_deserialize_generates_a_valid_network_object
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+
+    new_network = Network.deserialize(@network.serialize)
+
+    assert new_network.is_a?(Network)
+  end
+
+  def test_deserialized_network_behaves_same_as_before_serialization
+    # Generate network with random edges and biases
+    @network.reset_normalization_function
+    @network.edge_initialization_function = lambda { rand(-1..1) }
+    @network.neuron_bias_initialization_function = lambda { rand(-1..1) }
+
+    @network.create_layer(neurons: 5)
+    @network.create_layer(neurons: 50)
+    @network.create_layer(neurons: 50)
+
+    original_output = @network.run([0.5]*5)
+
+    new_network = Network.deserialize(@network.serialize)
+    new_output = new_network.run([0.5]*5)
+
+    assert original_output == new_output
   end
 end
