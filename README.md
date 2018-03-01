@@ -2,8 +2,6 @@
 
 This is a simple neural network implementation in Ruby.
 
-Currently, it allows generation of networks with randomized weights and neuron biases. In the future, this will be configurable.
-
 This gem does not include any learning implementations (back-prop, etc).
 
 ## Installation
