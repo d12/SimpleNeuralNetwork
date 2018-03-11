@@ -47,7 +47,7 @@ network.layers[layer_index].neurons[neuron_index].bias = new_neuron_bias
 In `SimpleNeuralNetwork`, edges point forward and edge weights stored as an array of integers on a `Neuron` object. To access the edge pointing from a neuron to the `n'th` neuron in the next layer:
 
 ```ruby
-network.layers[layer_index].neurons[neuron_index].edges[n] = 3
+network.layers[layer_index].neurons[neuron_index].edges[n] = new_edge_weight
 ```
 
 ## Improvements / Bugs
