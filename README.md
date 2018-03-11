@@ -34,5 +34,21 @@ The following code runs an input set against the network.
  => [0.2257, 0.7488, 0.1016, 0.9935]
 ```
 
+## Manipulating the network
+
+### Setting a neuron bias
+
+```ruby
+network.layers[layer_index].neurons[neuron_index].bias = new_neuron_bias
+```
+
+### Setting an edge weight
+
+In `SimpleNeuralNetwork`, edges point forward and edge weights stored as an array of integers on a `Neuron` object. To access the edge pointing from a neuron to the `n'th` neuron in the next layer:
+
+```ruby
+network.layers[layer_index].neurons[neuron_index].edges[n] = 3
+```
+
 ## Improvements / Bugs
 Improvements and bugs are listed as issues in the gem repository.
