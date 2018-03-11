@@ -17,6 +17,8 @@ gem install simple_neural_network
 The following code implements the above neural network.
 
 ```ruby
+require 'simple_neural_network'
+
 network = SimpleNeuralNetwork::Network.new
 
 network.create_layer(neurons: 5)
