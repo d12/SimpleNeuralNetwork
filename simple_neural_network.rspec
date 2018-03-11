@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
-  s.name        = 'SimpleNeuralNetwork'
+  s.name        = 'simple_neural_network'
   s.version     = '0.0.1'
-  s.date        = '2018-02-20'
-  s.summary     = "A very simple neural network implementation in Ruby."
-  s.description = "A very simple neural network implementation in Ruby."
+  s.date        = '2018-03-11'
+  s.summary     = "A simple neural network implementation in Ruby."
+  s.description = "A simple neural network implementation in Ruby."
   s.authors     = ["Nathaniel Woodthorpe"]
   s.email       = 'njwoodthorpe@gmail.com'
   s.files       = ["lib/simple_neural_network.rb"]
