@@ -7,7 +7,7 @@ This gem does not include any learning implementations (back-prop, etc).
 ## Installation
 
 ```
-gem install SimpleNeuralNetwork
+gem install simple_neural_network
 ```
 
 ## Sample usage:
