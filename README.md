@@ -7,7 +7,7 @@ This gem does not include any learning implementations (back-prop, etc).
 ## Installation
 
 ```
-gem install SimpleNeuralNetwork
+gem install simple_neural_network
 ```
 
 ## Sample usage:
@@ -17,6 +17,8 @@ gem install SimpleNeuralNetwork
 The following code implements the above neural network.
 
 ```ruby
+require 'simple_neural_network'
+
 network = SimpleNeuralNetwork::Network.new
 
 network.create_layer(neurons: 5)
