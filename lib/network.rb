@@ -23,7 +23,7 @@ class SimpleNeuralNetwork
 
     attr_accessor :inputs
 
-    attr_writer :normalization_function
+    attr_accessor :normalization_function
 
     attr_accessor :edge_initialization_function
     attr_accessor :neuron_bias_initialization_function
@@ -50,7 +50,7 @@ class SimpleNeuralNetwork
 
       # Get output from last layer. It recursively depends on layers before it.
       @layers[-1].get_output.map do |output|
-        @normalization_function.call(output)
+        (@normalization_function || method(:default_normalization_function)).call(output)
       end
     end
 
