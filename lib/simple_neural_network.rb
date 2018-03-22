@@ -1,3 +1,3 @@
 class SimpleNeuralNetwork
   require "network"
-end
+endfyguhkafjsbkvdnds,
