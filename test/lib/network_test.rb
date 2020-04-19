@@ -107,6 +107,39 @@ class NetworkTest < Minitest::Test
     assert output == [31]
   end
 
+  def test_does_not_apply_edge_weight_changes_if_cache_not_busted
+    @network.edge_initialization_function = lambda { 5 }
+
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+
+    output = @network.run([1])
+    assert output == [31]
+
+    @network.layers[0].neurons[0].edges = [1]
+
+    output = @network.run([1])
+    assert output == [31]
+  end
+
+  def test_applies_edge_weight_changes_if_cache_busted
+    @network.edge_initialization_function = lambda { 5 }
+
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+
+    output = @network.run([1])
+    assert output == [31]
+
+    @network.layers[0].neurons[0].edges[0] += 5
+    @network.clear_edge_caches
+
+    output = @network.run([1])
+    assert output == [56]
+  end
+
   def test_serialize_generates_valid_json
     @network.create_layer(neurons: 1)
     @network.create_layer(neurons: 1)

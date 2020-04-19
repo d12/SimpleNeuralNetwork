@@ -1,4 +1,5 @@
 require_relative "neuron"
+require "nmatrix"
 
 class SimpleNeuralNetwork
   class Layer
@@ -22,6 +23,7 @@ class SimpleNeuralNetwork
       @next_layer = nil
 
       populate_neurons
+      edge_matrix # Caches edge matrix
     end
 
     # The method that drives network output resolution.
@@ -39,18 +41,11 @@ class SimpleNeuralNetwork
         #              + (prev_layer.neurons[1] * prev_layer.neurons[1].edges[i])
         #              + ...
         #             ) + self.neurons[i].bias
+        prev_output = prev_layer.get_output
+        prev_output_matrix = NMatrix.new([prev_output.length, 1], prev_output, dtype: :float64)
 
-        prev_layer_output = prev_layer.get_output
-
-        # Generate the output values for the layer
-        (0..@size-1).map do |i|
-          value = 0
-
-          prev_layer_output.each_with_index do |output, index|
-            value += (output * prev_layer.neurons[index].edges[i])
-          end
-
-         value + @neurons[i].bias
+        result = (edge_matrix.dot(prev_output_matrix)).each_with_index.map do |val, i|
+          val + @neurons[i].bias
         end
       end
     end
@@ -61,6 +56,19 @@ class SimpleNeuralNetwork
       @neurons.each do |neuron|
         neuron.initialize_edges(@next_layer.size)
       end
+    end
+
+    def edge_matrix
+      return unless prev_layer
+
+      @edge_matrix ||= begin
+        elements = prev_layer.neurons.map{|a| a.edges}
+        NMatrix.new([elements.count, elements[0].count], elements.flatten, dtype: :float64).transpose
+      end
+    end
+
+    def clear_edge_cache
+      @edge_matrix = nil
     end
 
     private
