@@ -41,9 +41,13 @@ class SimpleNeuralNetwork
     # Accepts an array of input integers between 0 and 1
     # Input array length must be equal to the size of the first layer.
     # Returns an array of outputs.
-    def run(inputs)
-      unless inputs.size == input_size && inputs.all? { |input| input >= 0 && input <= 1 }
-        raise InvalidInputError.new("Invalid input passed to Network#run")
+    #
+    # skip_validation: Skips validations that may be expensive for large sets
+    def run(inputs, skip_validation: false)
+      unless skip_validation
+        unless inputs.size == input_size && inputs.all? { |input| input >= 0 && input <= 1 }
+          raise InvalidInputError.new("Invalid input passed to Network#run")
+        end
       end
 
       @inputs = inputs
@@ -82,6 +86,12 @@ class SimpleNeuralNetwork
 
     def reset_normalization_function
       @normalization_function = method(:default_normalization_function)
+    end
+
+    def clear_edge_caches
+      @layers.each do |layer|
+        layer.clear_edge_cache
+      end
     end
 
     # Serializes the neural network into a JSON string. This can later be deserialized back into a Network object
