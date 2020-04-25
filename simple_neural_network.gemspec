@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'simple_neural_network'
-  s.version     = '0.1.0'
+  s.version     = '0.2.0'
   s.date        = '2018-03-11'
   s.summary     = "A simple neural network implementation in Ruby."
   s.description = "A simple neural network implementation in Ruby."
