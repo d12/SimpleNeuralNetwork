@@ -23,7 +23,8 @@ class SimpleNeuralNetwork
 
     attr_accessor :inputs
 
-    attr_accessor :normalization_function
+    attr_accessor :hidden_layer_normalization_function
+    attr_accessor :output_normalization_function
 
     attr_accessor :edge_initialization_function
     attr_accessor :neuron_bias_initialization_function
@@ -32,7 +33,9 @@ class SimpleNeuralNetwork
       @layers = []
       @inputs = []
 
-      @normalization_function = method(:default_normalization_function)
+      @hidden_layer_normalization_function = method(:default_hidden_layer_normalization_function)
+      @output_normalization_function = method(:default_output_normalization_function)
+
       @edge_initialization_function = method(:default_edge_initialization_function)
       @neuron_bias_initialization_function = method(:default_neuron_bias_initialization_function)
     end
@@ -53,9 +56,7 @@ class SimpleNeuralNetwork
       @inputs = inputs
 
       # Get output from last layer. It recursively depends on layers before it.
-      @layers[-1].get_output.map do |output|
-        (@normalization_function || method(:default_normalization_function)).call(output)
-      end
+      @layers[-1].get_output(normalize: output_normalization_function)
     end
 
     # Returns the number of input nodes
@@ -84,8 +85,9 @@ class SimpleNeuralNetwork
       end
     end
 
-    def reset_normalization_function
-      @normalization_function = method(:default_normalization_function)
+    def reset_normalization_functions
+      @output_normalization_function = method(:default_output_normalization_function)
+      @hidden_layer_normalization_function = method(:default_hidden_layer_normalization_function)
     end
 
     def clear_edge_caches
@@ -149,8 +151,18 @@ class SimpleNeuralNetwork
     # The default normalization function for the network output
     # The standard logistic sigmoid function
     # f(x) = 1 / (1 + e^(-x))
-    def default_normalization_function(output)
+    def default_output_normalization_function(output)
       1 / (1 + (Math::E ** (-1 * output)))
+    end
+
+    # The default hidden layer normalization function
+    # The ReLU function
+    def default_hidden_layer_normalization_function(output)
+      if output < 0
+        0
+      else
+        output
+      end
     end
 
     def default_edge_initialization_function

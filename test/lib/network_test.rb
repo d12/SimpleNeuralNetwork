@@ -6,7 +6,8 @@ class NetworkTest < Minitest::Test
     @network = Network.new
     @network.edge_initialization_function = lambda { 1 }
     @network.neuron_bias_initialization_function = lambda { 1 }
-    @network.normalization_function = lambda { |x| x }
+    @network.hidden_layer_normalization_function = lambda { |x| x }
+    @network.output_normalization_function = lambda { |x| x }
   end
 
   def test_can_create_network
@@ -72,13 +73,38 @@ class NetworkTest < Minitest::Test
     end
   end
 
-  def test_run_applies_normalization_function
-    @network.normalization_function = lambda { |x| 2 * x }
-
+  def test_run_applies_output_normalization_function
     @network.create_layer(neurons: 1)
-    output = @network.run([1])
+    @network.create_layer(neurons: 1)
 
+    output = @network.run([1])
     assert output == [2]
+
+    @network.output_normalization_function = lambda { |x| 2 * x }
+
+    output = @network.run([1])
+    assert output == [4]
+  end
+
+  def test_run_does_not_use_hidden_layer_function_if_less_than_3_layers
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+
+    @network.hidden_layer_normalization_function = lambda { |x| 200 * x }
+
+    output = @network.run([1])
+    assert output == [2]
+  end
+
+  def test_run_uses_hidden_layer_function_if_3_or_more_layers
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+    @network.create_layer(neurons: 1)
+
+    @network.hidden_layer_normalization_function = lambda { |x| 100 * x }
+
+    output = @network.run([1])
+    assert output == [201]
   end
 
   def test_allows_setting_of_neuron_initialization_bias
@@ -158,7 +184,7 @@ class NetworkTest < Minitest::Test
 
   def test_deserialized_network_behaves_same_as_before_serialization
     # Generate network with random edges and biases
-    @network.reset_normalization_function
+    @network.reset_normalization_functions
     @network.edge_initialization_function = lambda { rand(-1..1) }
     @network.neuron_bias_initialization_function = lambda { rand(-1..1) }
 

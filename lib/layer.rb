@@ -30,7 +30,7 @@ class SimpleNeuralNetwork
     # get_output calculates the array of neuron values for this layer.
     # This is calculated by recursively fetching the output from the previous layer, then applying edge/node weight and bias rules.
     # The first layer will fetch it's values from @network.inputs
-    def get_output
+    def get_output(normalize: @network.hidden_layer_normalization_function)
       if !prev_layer
         # This is the first layer, so the output set is simply the network input set
         @network.inputs
@@ -47,6 +47,8 @@ class SimpleNeuralNetwork
         result = (edge_matrix.dot(prev_output_matrix)).each_with_index.map do |val, i|
           val + @neurons[i].bias
         end
+
+        result.map {|item| normalize.call(item) }
       end
     end
 
