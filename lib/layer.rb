@@ -1,5 +1,5 @@
 require_relative "neuron"
-require "nmatrix"
+require "matrix"
 
 class SimpleNeuralNetwork
   class Layer
@@ -42,9 +42,9 @@ class SimpleNeuralNetwork
         #              + ...
         #             ) + self.neurons[i].bias
         prev_output = prev_layer.get_output
-        prev_output_matrix = NMatrix.new([prev_output.length, 1], prev_output, dtype: :float64)
+        prev_output_matrix = Vector[*prev_output]
 
-        result = (edge_matrix.dot(prev_output_matrix)).each_with_index.map do |val, i|
+        result = (edge_matrix * prev_output_matrix).each_with_index.map do |val, i|
           val + @neurons[i].bias
         end
 
@@ -65,7 +65,7 @@ class SimpleNeuralNetwork
 
       @edge_matrix ||= begin
         elements = prev_layer.neurons.map{|a| a.edges}
-        NMatrix.new([elements.count, elements[0].count], elements.flatten, dtype: :float64).transpose
+        Matrix[*elements].transpose
       end
     end
 

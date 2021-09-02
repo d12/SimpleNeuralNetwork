@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    simple_neural_network (0.2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  simple_neural_network!
+
+BUNDLED WITH
+   2.1.4
