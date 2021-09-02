@@ -10,6 +10,4 @@ Gem::Specification.new do |s|
   s.files       += Dir['lib/*.rb']
   s.homepage    = 'https://github.com/d12/SimpleNeuralNetwork'
   s.license     = 'MIT'
-
-  s.add_dependency "nmatrix", "~> 0.2"
 end
